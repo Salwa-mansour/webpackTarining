@@ -1,13 +1,26 @@
 const path =require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-mode:'production',
+mode:'development',
 entry:{
  bundle : path.resolve(__dirname,'src/index.js')
 },
 output:{
     path:path.resolve(__dirname,'dist/assets'),
-    filename:'[name].js',
+    filename:'[name][contenthash].js',
+    clean:true
+},
+devtool:'source-map',
+devServer:{
+  static:{
+ directory:path.resolve(__dirname,'dist')
+},
+port:3000,
+open:true,
+hot:true,
+compress:true,
+historyApiFallback:true,
 },
 module :{
     rules:[
@@ -33,7 +46,26 @@ module :{
                 },
               },
         ]
+        },
+        {
+          test:/\.js$/,
+          exclude:/node_modules/,
+          use:{
+            loader:'babel-loader',
+            options:{
+              presets:[
+                '@babel/preset-env'
+              ]
+            }
+          }
         }
     ]
-  }
+  },
+  plugins:[
+    new HtmlWebpackPlugin({
+        title:'Webpack App',
+        filename: 'index.html',
+        template:'./src/Template.html'
+    })
+  ]
 }
