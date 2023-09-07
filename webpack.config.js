@@ -2,7 +2,7 @@ const path =require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-mode:'development',
+mode:'production',
 entry:{
  bundle : path.resolve(__dirname,'src/index.js')
 },
@@ -58,6 +58,17 @@ module :{
               ]
             }
           }
+        },
+        {
+          test: /\.(png|svg)$/i,
+          use:{
+            loader:'file-loader',
+            options:{
+              name:'[name][contenthash].[ext]',
+              outputPath: 'images',
+              clean:true
+            }
+          }
         }
     ]
   },
@@ -65,7 +76,8 @@ module :{
     new HtmlWebpackPlugin({
         title:'Webpack App',
         filename: 'index.html',
-        template:'./src/Template.html'
+        template:'./src/Template.html',
+       
     })
   ]
 }
